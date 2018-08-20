@@ -738,14 +738,14 @@ class Page(_BaseActions, _SelectorsManager, _ComponentsManager):
             browser_errors = self.driver.get_log("browser")
             for some_error in browser_errors:
                 message = some_error[u'message']
+                err_level = some_error[u'level']
                 for skip in skips:
                     if skip in message:
                         break
                     else:
-                        err_level = some_error[u'level']
-                        self.log("Browser error detected: {}".format(some_error),level="WARNING")
+                        self.log("Browser error detected: {}".format(some_error), level="WARNING")
                         if throw == True or throw.lower() == 'true' or err_level != 'WARNING':
-                            assert len(browser_errors)==0,"Non-zero Javascript error count"
+                            assert len(browser_errors)==0,"Non-zero Javascript non-warning count"
         return self
 
     def close(self):
