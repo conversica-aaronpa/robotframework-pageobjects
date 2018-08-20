@@ -739,13 +739,14 @@ class Page(_BaseActions, _SelectorsManager, _ComponentsManager):
             for some_error in browser_errors:
                 message = some_error[u'message']
                 err_level = some_error[u'level']
+                skipit = False
                 for skip in skips:
                     if skip in message:
-                        break
-                    else:
-                        self.log("Browser error detected: {}".format(some_error), level="WARNING")
-                        if throw == True or throw.lower() == 'true' or err_level != 'WARNING':
-                            assert len(browser_errors)==0,"Non-zero Javascript non-warning count"
+                        skipit = True
+                if not skipit:
+                    self.log("Browser error detected: {}".format(some_error), level="WARNING")
+                    if throw == True or throw.lower() == 'true' or err_level != 'WARNING':
+                        assert len(browser_errors)==0,"Non-zero Javascript non-warning count"
         return self
 
     def close(self):
