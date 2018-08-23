@@ -745,15 +745,15 @@ class Page(_BaseActions, _SelectorsManager, _ComponentsManager):
                         skipit = True
                 if not skipit:
                     self.log("Browser error detected: {}".format(some_error), level="WARNING")
-                    if rest_link != None:
-                        some_error.update(suite=self.suite_name)
-                        response = requests.post(rest_link['url'], json={"body":json.dumps(some_error)},
-                                                 auth=(rest_link['username'], rest_link['password']),
-                                                 headers={'content-type': 'application/json'})
-                        assert response.status_code == 201, response.text
-                    if throw == True or throw.lower() == 'true' or err_level != 'WARNING':
-                        assert len(browser_errors)==0,"Non-zero Javascript non-warning count"
-
+                    if err_level != 'WARNING':
+                        if rest_link != None:
+                            some_error.update(suite=self.suite_name)
+                            response = requests.post(rest_link['url'], json={"body":json.dumps(some_error)},
+                                                     auth=(rest_link['username'], rest_link['password']),
+                                                     headers={'content-type': 'application/json'})
+                            assert response.status_code == 201, response.text
+                        if throw == True or throw.lower() == 'true':
+                            assert len(browser_errors)==0,"Non-zero Javascript non-warning count"
         return self
 
     def close(self):
